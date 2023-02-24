@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\RegisterRequest;
+use Illuminate\Http\Request;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -15,9 +15,15 @@ class RegisterController extends Controller
         $this->userService = $userService;
     }
 
-    public function register(RegisterRequest $request): JsonResponse
-    {
-        $user = $this->userService->createUser($request->validated());
+    public function register(Request $request): JsonResponse
+    {   
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:3|confirmed',
+        ]);
+
+        $user = $this->userService->createUser($validatedData);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
