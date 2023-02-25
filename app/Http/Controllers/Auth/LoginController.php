@@ -12,8 +12,9 @@ class LoginController extends Controller
         try 
         {
             $validatedData = $request->validate([
+                'name' => 'required|max:255',
                 'email' => 'required|email',
-                'password' => 'required',
+                'password' => 'required|min:3',
             ]);
         } 
         catch (\Illuminate\Validation\ValidationException $e)
@@ -21,7 +22,6 @@ class LoginController extends Controller
             return response()->json(['error' => $e->errors()], 422);
         }
         
-
         if (!Auth::attempt($validatedData)) 
         {
             return response()->json([

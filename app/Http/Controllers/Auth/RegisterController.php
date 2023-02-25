@@ -1,8 +1,6 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
-require_once app_path('helpers.php');
-
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Controllers\Controller;
@@ -20,13 +18,20 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {   
-        $validatedData = validateRequestBody($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:3',
-        ]);
+        try 
+        {
+            $validatedData = $request->validate([
+                'name' => 'required|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:3',
+            ]);
+        } 
+        catch (\Illuminate\Validation\ValidationException $e)
+        {
+            return response()->json(['error' => $e->errors()], 422);
+        }
 
-        $user = $this->userService->createUser($validatedData);
+        $user = $this->userService->createUser($request->all());
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
