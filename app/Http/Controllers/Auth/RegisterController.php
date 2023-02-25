@@ -7,26 +7,21 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 
 class RegisterController extends Controller
 {
     protected $userService;
+    
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
     }
 
-    public function register(Request $request)
+    public function register(Request $request): HttpException|JsonResponse
     {   
-        $validatedData = validateRequestBody($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:3',
-        ]);
-        
-        $user = $this->userService->createUser($request->all());
+        $user = $this->userService->createUser($request);
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
