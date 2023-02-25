@@ -32,12 +32,12 @@ class PostController extends Controller
         //
     }
 
-    public function update(Request $request, Post $post)
+    public function update(Request $request, int $id)
     {
-        //
+        return $this->postService->updatePost($request, $id);
     }
-    public function destroy(Post $post)
+    public function destroy(int $id)
     {
-        //
+        return $this->postService->deletePost($id);
     }
 }

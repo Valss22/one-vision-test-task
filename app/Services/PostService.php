@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Http\JsonResponse;
 
 use App\Models\Post;
 
@@ -51,9 +52,17 @@ class PostService
             'body' => 'required',
             'author_name' => 'required|max:128',
         ]);
-        $post = Post::where('id', $id)->update([
-            'author_name' => $validatedData['author_name'],
-        ]);
+
+        $post = Post::findOrFail($id);
+        $post->update(['author_name' => $validatedData['author_name']]);
+
         return $post;
+    }
+    public function deletePost(int $id): JsonResponse
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return response()->json(['message' => 'Post deleted successfully.']);
     }
 }
