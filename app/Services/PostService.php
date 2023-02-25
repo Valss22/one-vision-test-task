@@ -6,6 +6,7 @@ require_once app_path('helpers.php');
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use App\Models\Post;
 
@@ -31,7 +32,7 @@ class PostService
             $page
         );   
     }
-    public function createPost(Request $request): Post
+    public function createPost(Request $request): HttpException|Post
     {
         $validatedData = validateRequestBody($request, [
             'title' => 'required|max:128',
@@ -39,6 +40,18 @@ class PostService
             'author_name' => 'required|max:128',
         ]);
         $post = Post::create([
+            'author_name' => $validatedData['author_name'],
+        ]);
+        return $post;
+    }
+    public function updatePost(Request $request, int $id): HttpException|Post
+    {
+        $validatedData = validateRequestBody($request, [
+            'title' => 'required|max:128',
+            'body' => 'required',
+            'author_name' => 'required|max:128',
+        ]);
+        $post = Post::where('id', $id)->update([
             'author_name' => $validatedData['author_name'],
         ]);
         return $post;

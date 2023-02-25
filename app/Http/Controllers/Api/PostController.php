@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 use App\Services\PostService;
 use App\Http\Controllers\Controller;
@@ -25,7 +24,7 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        //
+        return $this->postService->createPost($request); 
     }
 
     public function show(Post $post)
