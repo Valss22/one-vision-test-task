@@ -2,64 +2,51 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+
 use App\Http\Controllers\Controller;
 use App\Models\Post;
-use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        // $page = $request->input('page', 1);
+    public function index(Request $request)
+    {   
+        $page = $request->query('page', 1);
+        $response = Http::get('https://dummyjson.com/posts/?limit=150');
 
-        // // Make a request to the dummy JSON API and retrieve the posts for the current page
-        // $response = Http::get('https://jsonplaceholder.typicode.com/posts', [
-        //     'userId' => 1,
-        //     '_page' => $page,
-        //     '_limit' => 30,
-        // ]);
-    
-        // $posts = $response->json();
-        
-        return response()->json(['d'=> 1]);
-        // Return the posts as a JSON response
-        // return response()->json([
-        //     'posts' => $posts,
-        //     'current_page' => $page,
-        //     'last_page' => 5, // Hard-coded for this example, but you could calculate this dynamically based on the total number of posts
-        // ]);
+        $posts = collect($response->json()['posts']);
+
+        $perPage = 30;
+        $totalPosts = 150;
+
+        $offset = ($page - 1) * $perPage;
+        $paginatedPosts = $posts->slice($offset, $perPage);
+
+        return new LengthAwarePaginator(
+            $paginatedPosts,
+            $totalPosts,
+            $perPage,
+            $page
+        );    
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Post $post)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Post $post)
     {
         //
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Post $post)
     {
         //
