@@ -27,15 +27,16 @@ class PostController extends Controller
         return $this->postService->createPost($request); 
     }
 
-    public function show(Post $post)
+    public function show(int $id)
     {
-        //
+        return $this->postService->getPostById($id);
     }
 
     public function update(Request $request, int $id)
     {
         return $this->postService->updatePost($request, $id);
     }
+
     public function destroy(int $id)
     {
         return $this->postService->deletePost($id);

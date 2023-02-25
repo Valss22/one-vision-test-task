@@ -33,6 +33,13 @@ class PostService
             $page
         );   
     }
+
+    public function getPostById(int $id): Post
+    {
+        $post = Post::findOrFail($id);
+        return $post;
+    }
+
     public function createPost(Request $request): HttpException|Post
     {
         $validatedData = validateRequestBody($request, [
@@ -45,6 +52,7 @@ class PostService
         ]);
         return $post;
     }
+
     public function updatePost(Request $request, int $id): HttpException|Post
     {
         $validatedData = validateRequestBody($request, [
@@ -58,6 +66,7 @@ class PostService
 
         return $post;
     }
+
     public function deletePost(int $id): JsonResponse
     {
         $post = Post::findOrFail($id);
