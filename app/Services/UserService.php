@@ -3,9 +3,10 @@ namespace App\Services;
 
 require_once app_path('helpers.php');
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+
+use App\Models\User;
 
 
 class UserService
