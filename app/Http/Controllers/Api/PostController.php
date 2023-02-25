@@ -30,7 +30,7 @@ class PostController extends Controller
         return $this->postService->createPost($request); 
     }
 
-    public function show(int $id): Post
+    public function show(int $id)
     {
         return $this->postService->getPostById($id);
     }

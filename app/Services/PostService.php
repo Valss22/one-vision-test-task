@@ -34,10 +34,11 @@ class PostService
         );   
     }
 
-    public function getPostById(int $id): Post
+    public function getPostById(int $id)
     {
         $post = Post::findOrFail($id);
-        return $post;
+        $response = Http::get("https://dummyjson.com/posts/$id");
+        return $response->json();
     }
 
     public function createPost(Request $request): HttpException|Post
