@@ -21,7 +21,7 @@ class UserService
 
         return User::create([
             ...$validatedData,
-            'password' => bcrypt($data['password'])
+            'password' => bcrypt($validatedData['password'])
         ]);
     }
 }
