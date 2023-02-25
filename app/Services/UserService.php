@@ -9,9 +9,8 @@ class UserService
     public function createUser(array $data): User
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            ...$data,
+            'password' => bcrypt($data['password'])
         ]);
     }
 }
