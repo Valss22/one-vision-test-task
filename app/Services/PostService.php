@@ -50,7 +50,7 @@ class PostService
         ]);
         $post = Post::create([
             'author_name' => $validatedData['author_name'],
-            //'user_id' => $request->user()->id
+            'user_id' => $request->user()->id,
         ]);
         return $post;
     }
