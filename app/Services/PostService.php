@@ -62,11 +62,14 @@ class PostService
             'body' => 'required',
             'author_name' => 'required|max:128',
         ]);
-
         $post = Post::findOrFail($id);
-        $post->update(['author_name' => $validatedData['author_name']]);
-
-        return $post;
+        
+        if ($post->user->id === $request->user()->id)
+        {
+            $post->update(['author_name' => $validatedData['author_name']]);
+            return $post;
+        }
+        abort(403);
     }
 
     public function deletePost(int $id): JsonResponse
@@ -74,6 +77,6 @@ class PostService
         $post = Post::findOrFail($id);
         $post->delete();
 
-        return response()->json(['message' => 'Post deleted successfully.']);
+        return response()->json(['message' => 'Post deleted successfully']);
     }
 }

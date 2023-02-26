@@ -14,7 +14,7 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+    protected $hidden = ['user'];
     protected $fillable = [
         'author_name',
         'user_id',
