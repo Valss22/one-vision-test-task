@@ -40,8 +40,8 @@ class PostController extends Controller
         return $this->postService->updatePost($request, $id);
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(Request $request, int $id): JsonResponse
     {
-        return $this->postService->deletePost($id);
+        return $this->postService->deletePost($request, $id);
     }
 }

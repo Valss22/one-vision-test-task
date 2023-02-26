@@ -72,7 +72,7 @@ class PostService
         abort(403);
     }
 
-    public function deletePost(int $id): JsonResponse
+    public function deletePost($request, int $id): JsonResponse
     {
         $post = Post::findOrFail($id);
         if ($post->user->id === $request->user()->id)
